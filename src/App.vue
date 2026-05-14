@@ -1,10 +1,7 @@
 <template>
-  <p class="hello">Hello World</p>
+  <DatePicker />
 </template>
 
-<style scoped>
-.hello {
-  margin: 0;
-  font-size: 1.5rem;
-}
-</style>
+<script setup lang="ts">
+import DatePicker from './components/DatePicker.vue'
+</script>
