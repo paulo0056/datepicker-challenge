@@ -89,8 +89,8 @@ All colors, sizes, and borders are CSS custom properties defined on the `.dp` bl
 
 ```css
 .dp {
-  --dp-bg-selected: #d32f2f;  /* change selection color to red */
-  --dp-radius: 50%;            /* round day cells */
+  --dp-bg-selected: #d32f2f; /* change selection color to red */
+  --dp-radius: 50%; /* round day cells */
 }
 ```
 
@@ -98,14 +98,18 @@ All colors, sizes, and borders are CSS custom properties defined on the `.dp` bl
 
 ## Notes on the Temporal API
 
-- **`Temporal.PlainDate`** is the ideal type for timezone-free dates, which is exactly what a date picker represents. With the legacy `Date` object, UTC vs. local time is a constant source of bugs — Temporal eliminates this by design.
+Working with dates in JavaScript has always been a bit painful. The legacy `Date` object conflates timezone handling with date representation, which leads to bugs, especially around UTC vs. local time. Temporal fixes this by separating concerns into distinct types.
 
-- **`Temporal.Now.plainDateISO()`** returns today's date in the local timezone as a `PlainDate`, without any ambiguity.
+For a date picker, `Temporal.PlainDate` is the right fit. It represents a calendar date with no time, no timezone, just year, month, day. No surprises.
 
-- **`Temporal.PlainDate.compare(a, b)`** returns `-1`, `0`, or `1`, making date comparisons explicit and without any timestamp conversion.
+A few things that made the implementation cleaner:
 
-- **`PlainDate.with({ day: 1 })`**, **`.add()`**, and **`.subtract()`** are immutable methods that return new instances. This pairs naturally with the engine's immutable design.
+- **`Temporal.Now.plainDateISO()`** gives today's date in the local timezone directly as a `PlainDate`. No conversion needed.
 
-- **`daysInMonth`** is a `PlainDate` property that automatically returns the correct number of days for any given month and year (leap years included), with no manual logic required.
+- **`PlainDate.compare(a, b)`** returns `-1`, `0`, or `1`. Comparing dates without converting to timestamps feels much more intentional.
 
-- The `@js-temporal/polyfill` is loaded once in `main.ts` and registered on `globalThis`. The engine imports nothing — it uses `Temporal` as a global, the same way it would use the native API once it becomes universally available.
+- **`.with()`, `.add()`, `.subtract()`** all return new instances instead of mutating. This made the immutable engine design feel natural — the API and the architecture pull in the same direction.
+
+- **`daysInMonth`** just works. February in a leap year, 31-day months — all handled automatically without any lookup table or manual logic.
+
+The polyfill is loaded once in `main.ts` and assigned to `globalThis`, so the engine can use `Temporal` as if it were already a native browser API. When it eventually ships universally, removing the polyfill is the only change needed.
