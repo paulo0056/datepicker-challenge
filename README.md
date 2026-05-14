@@ -57,7 +57,7 @@ The `Temporal` API follows ISO 8601 where `dayOfWeek` goes from 1 (Monday) to 7 
 
 ### 2. The Component (`src/components/DatePicker.vue`)
 
-A Vue 3 wrapper that consumes the engine. All calendar logic lives in the engine; the component is only responsible for:
+The Vue 3 wrapper that consumes the engine. All calendar logic lives in the engine, the component is only responsible for:
 
 - Displaying the current state (grid, month label, input value)
 - Delegating user actions to the engine and updating the state
