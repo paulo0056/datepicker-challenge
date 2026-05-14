@@ -80,7 +80,7 @@ export function createCalendarState(
   cursor?: Temporal.PlainDate,
   selected?: Temporal.PlainDate | null,
 ): CalendarState {
-  // Normalize cursor to day 1 so the viewed month is always well-defined.
+  // Normalize cursor to day 1 so the viewed month is always defined.
   const c = (cursor ?? Temporal.Now.plainDateISO()).with({ day: 1 })
   const s = selected !== undefined ? selected : null
 
